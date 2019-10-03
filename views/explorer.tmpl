@@ -21,10 +21,7 @@
                     <span class="dcricon-info fs24 ml-3 mt-2"></span>
                 </span>
                 <div class="pb-1 d-flex justify-content-end align-items-end flex-wrap">
-                  <span class="fs12 nowrap text-secondary px-2 my-2">
-                      {{intComma (add $Offset 1)}} &ndash; {{intComma (add $Offset .Rows)}} of {{intComma (add .BestBlock 1) }} rows
-                  </span>
-                  <span class="fs12 nowrap text-right">
+                  <span class="fs12 nowrap text-right mr-2">
                       <select
                           data-target="pagenavigation.pagesize"
                           data-action="change->pagenavigation#setPageSize"
@@ -41,38 +38,6 @@
                         {{if eq $blocksCount 20 30 50 100 .WindowSize}}{{else}}<option selected value="{{$blocksCount}}">{{$blocksCount}} per page</option>{{end}}
                       </select>
                   </span>
-                  <nav aria-label="blocks navigation" data-limit="{{.Rows}}" class="ml-2 my-2 d-inline-block text-right">
-                      <ul class="pages mb-0">
-                          {{if lt $topBlock .BestBlock}}
-                          <li>
-                             <a
-                             class="text-secondary"
-                             href="/blocks?height={{.BestBlock}}&rows={{.Rows}}"
-                             > Newest</a>
-                          </li>
-                          <li>
-                             <a
-                             class="text-secondary"
-                             href="/blocks?height={{ add $topBlock (int64 $blocksCount) }}&rows={{.Rows}}"
-                             > Newer</a>
-                          </li>
-                          {{end}}
-                          {{if ge $topBlock .Rows}}
-                            <li>
-                                <a
-                                class="text-secondary"
-                                href="/blocks?height={{ subtract $topBlock (int64 $blocksCount) }}&rows={{.Rows}}"
-                                >Older</a>
-                            </li>
-                            <li>
-                                <a
-                                class="text-secondary"
-                                href="/blocks?height={{subtract .Rows 1}}&rows={{.Rows}}"
-                                >Oldest</a>
-                            </li>
-                          {{end}}
-                      </ul>
-                  </nav>
                 </div>
             </div>
             {{else}}

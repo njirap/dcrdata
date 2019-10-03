@@ -43,38 +43,25 @@
                       {{if eq $windowsCount 20 30 50 100 200}}{{else}}<option selected value="{{$windowsCount}}">{{$windowsCount}} per page</option>{{end}}
                     </select>
                 </span>
-                <nav aria-label="blocks navigation" data-limit="{{.Limit}}" class="ml-2 my-2 d-inline-block text-right">
-                  <ul class="pages mb-0">
-                    {{if ne .OffsetWindow 0}}
-                    <li>
-                        <a
-                        class="text-secondary"
-                        href="/ticketpricewindows?offset=0&rows={{.Limit}}"
-                        > Newest</a>
-                    </li>
-                    <li>
-                        <a
-                        class="text-secondary"
-                        href="/ticketpricewindows?offset={{ subtract .OffsetWindow .Limit }}&rows={{.Limit}}"
-                        > Newer</a>
-                    </li>
-                    {{end}}
-                    {{if lt $oldest $lastWindow}}
-                    <li>
-                        <a
-                        class="text-secondary"
-                        href="/ticketpricewindows?offset={{ add .OffsetWindow .Limit }}&rows={{.Limit}}"
-                        >Older</a>
-                    </li>
-                    <li>
-                        <a
-                        class="text-secondary"
-                        href="/ticketpricewindows?offset={{subtract $lastWindow .Limit}}&rows={{.Limit}}"
-                        >Oldest</a>
-                    </li>
-                    {{end}}
-                  </ul>
-                </nav>
+                <span class="fs12 nowrap text-right">
+                    <select
+                        data-target="pagenavigation.pageage"
+                        data-action="change->pagenavigation#setPageAge"
+                        data-rows="{{.Limit}}"
+                        data-offsetkey="offset"
+                        class="pageage text-secondary my-2"
+                    >
+                      <option selected disabled>New<option>
+                      {{if ne .OffsetWindow 0}}
+                          <option value="0">Newest</option>
+                          <option value="{{subtract .OffsetWindow .Limit}}">Newer</option>
+                      {{end}}
+                      {{if lt $oldest $lastWindow}}
+                          <option value="{{add .OffsetWindow .Limit}}">Older</option>
+                          <option value="{{subtract $lastWindow .Limit}}">Oldest</option>
+                      {{end}}
+                    </select>
+               </span>
               </div>
             </div>
             {{else}}
@@ -108,8 +95,8 @@
                       <th><span class="d-none d-sm-inline">Total </span>Size</th>
                       <th class="text-center d-none d-sm-table-cell">Difficulty</th>
                       <th class="text-center"><span class="d-none d-sm-inline">Ticket </span>Price<span class="d-none d-sm-inline"> (DCR)</span></th>
-                      <th class="text-right pr-0 jsonly">Age</th>
-                      <th class="text-right pr-0 d-none d-sm-table-cell">Start Time</th>
+                      <th class="text-center pr-0 jsonly">Age</th>
+                      <th class="text-center pr-0 d-none d-sm-table-cell">Start Time</th>
                   </tr>
               </thead>
               <tbody>
@@ -131,8 +118,8 @@
                       <td>{{.FormattedSize}}</td>
                       <td class="text-center d-none d-sm-table-cell">{{template "decimalParts" (float64AsDecimalParts .Difficulty 0 true)}}</td>
                       <td class="text-center">{{printf "%.2f" (toFloat64Amount .TicketPrice)}}</td>
-                      <td class="text-right pr-0 jsonly" data-controller="time" data-target="time.age" data-age="{{.StartTime.UNIX}}"></td>
-                      <td class="text-right pr-0 d-none d-sm-table-cell">{{.StartTime}}</td>
+                      <td class="text-center pr-0 jsonly" data-controller="time" data-target="time.age" data-age="{{.StartTime.UNIX}}"></td>
+                      <td class="text-center pr-0 d-none d-sm-table-cell">{{.StartTime}}</td>
                   </tr>
               {{end}}
               </tbody>
